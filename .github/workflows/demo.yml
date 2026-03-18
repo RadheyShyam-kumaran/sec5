@@ -18,6 +18,8 @@ jobs:
   build:
     needs: test
     runs-on: ubuntu-latest
+    outputs:
+      script-file: ${{ steps.publish.outputs.script-file }} # is a context value to show the output
     steps:
       - name: Get code
         uses: actions/checkout@v3
@@ -25,7 +27,9 @@ jobs:
         run: npm ci
       - name: Build website
         run: npm run build
-      - name : upload artifacts
+      - name: publish js filename
+        run: find dist/assets/*.js -type f -exevdir echo 'script-file={}'>> $GITHUB_OUTPUT ';' # used to find the file in the particular js file  AND IN THIS writter we are assigning script-file as a output and use github output
+      - name : upload artifacts  # used to store the bulid and dependenices as artifiact  using the path 
         uses : actions/upload-artifact@v4
         with :
           name : dist-flies
@@ -36,11 +40,13 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name : Get build artifacts
+      - name : Get build artifacts # used to dowload the artificat which we dowladed in bulid workflow
         uses : actions/download-artifact@v4
         with : 
-          name : dist-flies
+          name : dist-flies 
       - name : Output contents
-        run : ls 
+        run : ls  # used to some the contents
+      - name: output filename 
+        run : echo "${{ needs.build.outputs.script-file}}"
       - name: Deploy
         run: echo "Deploying..."
