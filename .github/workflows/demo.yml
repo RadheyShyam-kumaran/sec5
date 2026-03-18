@@ -1,15 +1,15 @@
 name: Deploy website
 on:
-  push:
-    branches:
+  push:  #  when to  trigger the  workflow 
+    branches: # on which branch
       - main
 jobs:
-  test:
-    runs-on: ubuntu-latest
+  test: # test  first work flow 
+    runs-on: ubuntu-latest  # which version 
     steps:
       - name: Get code
         uses: actions/checkout@v3
-      - name:  Cache dependcies
+      - name:  Cache dependcies # where we have to cache dependies  and again  use the cache in the next again use 
         uses : actions/cache@v3
         with: 
           path: ~/.npm
@@ -24,7 +24,7 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     outputs:
-      script-file: ${{ steps.publish.outputs.script-file }} # is a context value to show the output
+      script-file: ${{ steps.publish.outputs.script-file }} # is a context value to show the output where we use to publish js file 
     steps:
       - name: Get code
         uses: actions/checkout@v3
@@ -56,7 +56,7 @@ jobs:
           name : dist-flies 
       - name : Output contents
         run : ls  # used to some the contents
-      - name: output filename 
-        run : echo "${{ needs.build.outputs.script-file}}"
+      - name: output filename  # here we use the script file refer from build - output  filename
+        run : echo "${{ needs.build.outputs.script-file}}"  
       - name: Deploy
         run: echo "Deploying..."
