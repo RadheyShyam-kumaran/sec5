@@ -28,7 +28,7 @@ jobs:
       - name: Build website
         run: npm run build
       - name: publish js filename
-        run: find dist/assets/*.js -type f -exevdir echo 'script-file={}'>> $GITHUB_OUTPUT ';' # used to find the file in the particular js file  AND IN THIS writter we are assigning script-file as a output and use github output
+        run: find dist/assets/*.js -type f -exec echo 'script-file={}'>> $GITHUB_OUTPUT ';' # used to find the file in the particular js file  AND IN THIS writter we are assigning script-file as a output and use github output
       - name : upload artifacts  # used to store the bulid and dependenices as artifiact  using the path 
         uses : actions/upload-artifact@v4
         with :
